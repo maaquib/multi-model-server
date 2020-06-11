@@ -405,6 +405,13 @@ public class WorkerThread implements Runnable {
             thread.interrupt();
             aggregator.sendError(
                     null, "Worker scaled down.", HttpResponseStatus.INTERNAL_SERVER_ERROR);
+            if (this.serverThread) {
+                try {
+                    thread.join(60L);
+                } catch (InterruptedException e) {
+                    logger.error("Server thread join interrupted");
+                }
+            }
         }
     }
 
